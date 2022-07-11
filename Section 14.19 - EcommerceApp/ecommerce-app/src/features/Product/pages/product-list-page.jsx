@@ -4,6 +4,7 @@ import { Box, Container, Grid, makeStyles, Paper } from "@material-ui/core";
 import productAPI from "api/product-api";
 import Pagination from '@material-ui/lab/Pagination';
 import { useState } from "react";
+import ProductList from "../components/ProductList/product-list";
 
 ProductListPage.propTypes = {};
 
@@ -21,24 +22,29 @@ const useStyles = makeStyles((theme) => ({
 
 function ProductListPage(props) {
     const classes = useStyles();
-    const [productList, setProductList] = useState([]);
-    const [filters, setFilters] = useState({
-        _page: 1,
-        _limit: 10,
-    });
     const [pagination, setPagination] = useState({
-        count: 1,
-        limit: 1
+        limit: 0,
+        page: 0,
+        total: 0
     })
+    const [filter, setFilter] = useState({
+        _page: 1,
+        _limit: 5
+    })
+    const [listProduct, setListProduct] = useState([])
 
     useEffect(() => {
         (async () => {
-            const {data, pagination} = await productAPI.getListProduct(filters);
-            setProductList(productList);
+            const {data, pagination} = await productAPI.getListProduct(filter)
             setPagination(pagination)
-            console.log({data, pagination});
-        })();
-    }, [filters]);
+            setListProduct(data)
+        })()
+    }, [filter])
+
+    const onPaginationChange = (event, page) => {
+        const newPage = {...filter, _page: page}
+        setFilter(newPage)
+    }
     return (
         <Box>
             <Container>
@@ -47,8 +53,10 @@ function ProductListPage(props) {
                         <Paper elevation={0}>Left Column</Paper>
                     </Grid>
                     <Grid item className={classes.right}>
-                        <Paper elevation={0}>Right Column</Paper>
-                        <Pagination count={Math.ceil(pagination?.count / pagination?.limit)} />
+                        <Paper elevation={0}>
+                            <ProductList listProduct={listProduct}></ProductList>
+                            <Pagination onChange={onPaginationChange} count={Math.ceil(pagination.total / pagination.limit)} color="primary" />
+                        </Paper>
                     </Grid>
                 </Grid>
             </Container>
