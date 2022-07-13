@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
     },
 
     right: {
-        flex: "1 1 auto",
+        flex: "1 1 0",
     },
 }));
 
@@ -29,7 +29,7 @@ function ProductListPage(props) {
     })
     const [filter, setFilter] = useState({
         _page: 1,
-        _limit: 5
+        _limit: 10
     })
     const [listProduct, setListProduct] = useState([])
 
