@@ -12,7 +12,7 @@ const productAPI = {
         
        const data = await axiosClient.get('/products', {params: pagingParams})
 
-       const count = await axiosClient.get('/products/count')
+       const count = await axiosClient.get('/products/count', {params: pagingParams})
     
        return {
           data: data,
