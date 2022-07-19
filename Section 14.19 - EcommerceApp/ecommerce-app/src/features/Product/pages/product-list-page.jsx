@@ -26,8 +26,14 @@ const useStyles = makeStyles((theme) => ({
 function ProductListPage(props) {
     const classes = useStyles();
     const [freeShip, setFreeShip] = useState(false)
-    const [listFilter, setListFilter] = useState([]);
-    const [arr, setArr] = useState([1, 2 ,3 ,4])
+    const [listFilter, setListFilter] = useState([
+        {
+            id: 1,
+            label: 'Miễn phí giao hàng',
+            isToggle: true,
+            isRemove: false
+        }
+    ]);
     const [pagination, setPagination] = useState({
         limit: 0,
         page: 0,
@@ -49,18 +55,6 @@ function ProductListPage(props) {
         })()
     }, [filter])
 
-    useEffect(() => {
-        const newElement ={
-                id: 1,
-                label: 'Miễn phí giao hàng',
-                isToggle: true,
-                isRemove: false
-            }
-        const newArr = [...listFilter]
-        newArr.push(newElement)
-        setListFilter(newArr)
-    }, [listFilter])
-
     const onPaginationChange = (event, page) => {
         const newPage = {...filter, _page: page}
         setFilter(newPage)
@@ -71,8 +65,11 @@ function ProductListPage(props) {
         setFilter(newPage)
     }
 
-    const onProductFiltersChange = (value) => {
-        const newPage = {...filter, ...value};
+    const onProductFiltersChange = (valueFilter, filterObject) => {
+        const newPage = {...filter, ...valueFilter};
+        const newListFilter = [...listFilter]
+        newListFilter.push(filterObject)
+        setListFilter(newListFilter)
         setFilter(newPage)
     }
 
@@ -87,15 +84,13 @@ function ProductListPage(props) {
                 <Grid container spacing={1}>
                     <Grid item className={classes.left}>
                         <Paper elevation={0}>
-                        {listFilter.length > 0 && (
-                            <ProductFilters onProductFiltersChange={onProductFiltersChange} listFilter={listFilter} arr={arr}></ProductFilters>
-                        )}
+                            <ProductFilters onProductFiltersChange={onProductFiltersChange} ></ProductFilters>
                         </Paper>
                     </Grid>
                     <Grid item className={classes.right}>
                         <Paper elevation={0}>
                             <ProductSort sortValue={filter._sort} onSortValueChange={onSortValueChange}></ProductSort>
-                            <ProductFilterList onChangeFreeShip = {onChangeFreeShip}></ProductFilterList>
+                            <ProductFilterList onChangeFreeShip = {onChangeFreeShip} listFilter={listFilter}></ProductFilterList>
                             <ProductList listProduct={listProduct}></ProductList>
                             <Pagination onChange={onPaginationChange} count={Math.ceil(pagination.total / pagination.limit)} color="primary" />
                         </Paper>

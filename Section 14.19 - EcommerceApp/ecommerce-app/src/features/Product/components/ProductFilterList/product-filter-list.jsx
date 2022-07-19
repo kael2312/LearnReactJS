@@ -10,7 +10,6 @@ import { useEffect } from "react";
 ProductFilterList.propTypes = {
     listFilter: PropTypes.array,
     onChangeFreeShip: PropTypes.func,
-    arr: PropTypes.array
 };
 
 
@@ -27,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function ProductFilterList(props) {
-    const { listFilter, onChangeFreeShip, arr } = props
+    const { listFilter, onChangeFreeShip } = props
     const classes = useStyles();
     const [toggleChip, setToggleChip] = useState(false);
     const handleDelete = () => {
@@ -38,24 +37,20 @@ function ProductFilterList(props) {
         setToggleChip(!toggleChip);
         if (onChangeFreeShip) onChangeFreeShip();
     };
-
-    useEffect(() => {
-        console.log(arr);
-
-    }, [props, listFilter, arr])
     return (
         <div className={classes.root}>
-            {/* {listFilter.map((filter) => {
+            {listFilter.map((filter) => {
                 return (
                     <Chip
                         key={filter.id}
                         size="small"
                         label={filter.label}
-                        onClick={filter.isToggle ? handleClick : ''}
+                        onClick={filter.isToggle ? handleClick : null}
                         color={toggleChip ? "primary" : "default"}
+                        onDelete={filter.isRemove ? handleDelete : null}
                     />
                 );
-            })} */}
+            })}
 
             {/* <Chip
                 size="small"

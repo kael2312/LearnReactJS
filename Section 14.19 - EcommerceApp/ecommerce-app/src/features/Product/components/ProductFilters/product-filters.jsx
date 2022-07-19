@@ -57,12 +57,11 @@ function ProductFilters({ onProductFiltersChange }) {
     }, []);
 
     const onCategoryChange = (category) => {
-        const newFilter = { category: category.id };
-        setFilterValue("category", newFilter);
+        setFilterValue("category", category);
     };
 
     const onPriceRangeChange = (event, newValue) => {
-        setValue(newValue)
+        setValue(newValue);
         const newFilter = {
             "_where[0][salePrice_gte]": newValue[0] * 1000,
             "_where[1][salePrice_lte]": newValue[1] * 500000,
@@ -77,7 +76,15 @@ function ProductFilters({ onProductFiltersChange }) {
     const setFilterValue = (filterType, value) => {
         switch (filterType) {
             case "category":
-                if (onProductFiltersChange) onProductFiltersChange(value);
+                console.log(value);
+                const valueFilter = { category: value.id }
+                const filterObject = {
+                    id: 2,
+                    label: value.name,
+                    isToggle: false,
+                    isRemove: true,
+                };
+                if (onProductFiltersChange) onProductFiltersChange(valueFilter, filterObject);
                 break;
             case "price":
                 if (onProductFiltersChange) onProductFiltersChange(value);
