@@ -83,6 +83,7 @@ function ProductFilters({ onProductFiltersChange }) {
                     label: value.name,
                     isToggle: false,
                     isRemove: true,
+                    isActive: true
                 };
                 if (onProductFiltersChange) onProductFiltersChange(valueFilter, filterObject);
                 break;

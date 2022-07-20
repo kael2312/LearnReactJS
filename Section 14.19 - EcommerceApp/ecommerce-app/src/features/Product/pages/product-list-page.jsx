@@ -31,7 +31,8 @@ function ProductListPage(props) {
             id: 1,
             label: 'Miễn phí giao hàng',
             isToggle: true,
-            isRemove: false
+            isRemove: false,
+            isActive: false
         }
     ]);
     const [pagination, setPagination] = useState({
@@ -73,9 +74,15 @@ function ProductListPage(props) {
         setFilter(newPage)
     }
 
-    const onChangeFreeShip = () => {
+    const onChangeFreeShip = (newFilter) => {
         const newPage = {...filter, isFreeShip: !freeShip};
         setFilter(newPage)
+        const freeShipObj = listFilter.find(x => x.id === newFilter.id)
+        const freeShipIndex = listFilter.findIndex(x => x.id === newFilter.id)
+        const newFreeShipObj = {...freeShipObj, isActive: !newFilter.isActive}
+        const newListFilter = [...listFilter]
+        newListFilter[freeShipIndex] = newFreeShipObj
+        setListFilter(newListFilter)
         setFreeShip(!freeShip)
     }
     return (

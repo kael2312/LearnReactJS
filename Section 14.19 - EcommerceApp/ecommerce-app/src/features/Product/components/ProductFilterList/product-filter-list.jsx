@@ -33,9 +33,8 @@ function ProductFilterList(props) {
         console.info("You clicked the delete icon.");
     };
 
-    const handleClick = () => {
-        setToggleChip(!toggleChip);
-        if (onChangeFreeShip) onChangeFreeShip();
+    const handleClick = (filter) => {
+        if (onChangeFreeShip) onChangeFreeShip(filter);
     };
     return (
         <div className={classes.root}>
@@ -45,8 +44,8 @@ function ProductFilterList(props) {
                         key={filter.id}
                         size="small"
                         label={filter.label}
-                        onClick={filter.isToggle ? handleClick : null}
-                        color={toggleChip ? "primary" : "default"}
+                        onClick={filter.isToggle ? () => handleClick(filter) : null}
+                        color={filter.isActive ? "primary" : "default"}
                         onDelete={filter.isRemove ? handleDelete : null}
                     />
                 );
