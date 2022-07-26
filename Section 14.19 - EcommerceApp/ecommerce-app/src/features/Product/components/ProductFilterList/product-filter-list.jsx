@@ -10,6 +10,7 @@ import { useEffect } from "react";
 ProductFilterList.propTypes = {
     listFilter: PropTypes.array,
     onChangeFreeShip: PropTypes.func,
+    onDeleteCategory: PropTypes.func
 };
 
 
@@ -26,16 +27,17 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function ProductFilterList(props) {
-    const { listFilter, onChangeFreeShip } = props
+    const { listFilter, onChangeFreeShip, onDeleteCategory } = props
     const classes = useStyles();
     const [toggleChip, setToggleChip] = useState(false);
-    const handleDelete = () => {
-        console.info("You clicked the delete icon.");
-    };
 
-    const handleClick = (filter) => {
+    const handleToggleFilter = (filter) => {
         if (onChangeFreeShip) onChangeFreeShip(filter);
     };
+
+    const handleDeleteFilter = (filter) => {
+        if (onDeleteCategory) onDeleteCategory(filter);
+    }
     return (
         <div className={classes.root}>
             {listFilter.map((filter) => {
@@ -44,9 +46,9 @@ function ProductFilterList(props) {
                         key={filter.id}
                         size="small"
                         label={filter.label}
-                        onClick={filter.isToggle ? () => handleClick(filter) : null}
+                        onClick={filter.isToggle ? () => handleToggleFilter(filter) : null}
                         color={filter.isActive ? "primary" : "default"}
-                        onDelete={filter.isRemove ? handleDelete : null}
+                        onDelete={filter.isRemove ? () => handleDeleteFilter(filter) : null}
                     />
                 );
             })}

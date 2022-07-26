@@ -69,7 +69,12 @@ function ProductListPage(props) {
     const onProductFiltersChange = (valueFilter, filterObject) => {
         const newPage = {...filter, ...valueFilter};
         const newListFilter = [...listFilter]
-        newListFilter.push(filterObject)
+        const filterIndex = newListFilter.findIndex(x => x.id === filterObject.id)
+        if (filterIndex < 0) {
+            newListFilter.push(filterObject)
+        }else{
+            newListFilter[filterIndex] = filterObject
+        }
         setListFilter(newListFilter)
         setFilter(newPage)
     }
@@ -85,6 +90,15 @@ function ProductListPage(props) {
         setListFilter(newListFilter)
         setFreeShip(!freeShip)
     }
+
+    const onDeleteCategory = (newFilter) => {
+        const newPage = {...filter}
+        const newListFilter = [...listFilter]
+        delete newPage['category']
+        newListFilter.splice(1, 1)
+        setFilter(newPage)
+        setListFilter(newListFilter)
+    }
     return (
         <Box>
             <Container>
@@ -97,7 +111,7 @@ function ProductListPage(props) {
                     <Grid item className={classes.right}>
                         <Paper elevation={0}>
                             <ProductSort sortValue={filter._sort} onSortValueChange={onSortValueChange}></ProductSort>
-                            <ProductFilterList onChangeFreeShip = {onChangeFreeShip} listFilter={listFilter}></ProductFilterList>
+                            <ProductFilterList onDeleteCategory = {onDeleteCategory} onChangeFreeShip = {onChangeFreeShip} listFilter={listFilter}></ProductFilterList>
                             <ProductList listProduct={listProduct}></ProductList>
                             <Pagination onChange={onPaginationChange} count={Math.ceil(pagination.total / pagination.limit)} color="primary" />
                         </Paper>
