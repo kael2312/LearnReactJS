@@ -8,6 +8,9 @@ import ProductList from "../components/ProductList/product-list";
 import ProductSort from "../components/ProductSort/product-sort";
 import ProductFilters from "../components/ProductFilters/product-filters";
 import ProductFilterList from "../components/ProductFilterList/product-filter-list";
+import { useHistory, useLocation } from "react-router-dom";
+import QueryString from "qs";
+import queryString from "query-string"
 
 ProductListPage.propTypes = {};
 
@@ -25,6 +28,9 @@ const useStyles = makeStyles((theme) => ({
 
 function ProductListPage(props) {
     const classes = useStyles();
+    const history = useHistory();
+    const location = useLocation();
+    const queryParams = queryString.parse(location.search)
     const [freeShip, setFreeShip] = useState(false)
     const [listFilter, setListFilter] = useState([
         {
@@ -40,13 +46,21 @@ function ProductListPage(props) {
         page: 0,
         total: 0
     })
-    const [filter, setFilter] = useState({
-        _page: 1,
-        _limit: 9,
-        _sort: 'salePrice:ASC',
-        isFreeShip: freeShip
-    })
+    const [filter, setFilter] = useState(() => ({
+        ...queryParams,
+        _page: Number.parseInt(queryParams._page) || 1,
+        _limit: Number.parseInt(queryParams._limit)|| 9,
+        _sort: queryParams._sort || 'salePrice:ASC',
+        isFreeShip: queryParams.isFreeShip || freeShip
+    }))
     const [listProduct, setListProduct] = useState([])
+
+    useEffect(() => {
+        history.push({
+            pathname: history.location.pathname,
+            search: QueryString.stringify(filter)
+        })
+    }, [history, filter])
 
     useEffect(() => {
         (async () => {

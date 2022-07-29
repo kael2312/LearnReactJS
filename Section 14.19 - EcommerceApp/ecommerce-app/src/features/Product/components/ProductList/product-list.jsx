@@ -10,7 +10,6 @@ ProductList.propTypes = {
 
 function ProductList(props) {
     const { listProduct } = props;
-    console.log(listProduct);
     return (
         <Box>
             <Grid container spacing={1}>
