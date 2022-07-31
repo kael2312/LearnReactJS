@@ -22,7 +22,14 @@ const productAPI = {
               limit: params._limit
           }
        }        
+    },
+
+    getById(productId){
+        const url = `/products/${productId}`
+        return axiosClient.get(url)
     }
+
+
 };
 
 export default productAPI;
